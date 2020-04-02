@@ -1,9 +1,21 @@
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+// const User = require('../models/userModel.js');
 
 exports.deleteOne = (Model) => catchAsync(async (req, res, next) => {
-  const doc = await Model.findByIdAndDelete(req.params.id);
+  const query = await Model.findById(req.params.bookId);
+
+  if (String(query.user._id) !== String(req.user._id)) {
+    return next(
+      new AppError(
+        'No document found with that ID (may be there is, but not yours)',
+        404,
+      ),
+    );
+  }
+
+  const doc = await Model.findByIdAndDelete(req.params.bookId);
 
   if (!doc) {
     return next(new AppError('No doc found with that ID', 404));
@@ -16,13 +28,24 @@ exports.deleteOne = (Model) => catchAsync(async (req, res, next) => {
 });
 
 exports.updateOne = (Model) => catchAsync(async (req, res, next) => {
-  const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+  const query = await Model.findById(req.params.bookId);
+
+  if (query && (String(query.user._id) !== String(req.user._id))) {
+    return next(
+      new AppError(
+        'No document found with that ID (may be there is, but not yours)',
+        404,
+      ),
+    );
+  }
+
+  const doc = await Model.findByIdAndUpdate(req.params.bookId, req.body, {
     new: true,
     runValidators: true,
   });
 
   if (!doc) {
-    return next(new AppError('No doc found with that ID', 404));
+    return next(new AppError('No doc found with that IDppppp', 404));
   }
 
   res.status(200).json({
@@ -34,23 +57,32 @@ exports.updateOne = (Model) => catchAsync(async (req, res, next) => {
 });
 
 exports.createOne = (Model) => catchAsync(async (req, res, next) => {
+  if (!req.body.user) req.body.user = req.user; //IMPORTANT */
   const newDoc = await Model.create(req.body);
 
   res.status(201).json({
     status: 'success',
-    data: {
-      data: newDoc,
-    },
+    data: newDoc,
   });
 });
 
 exports.getOne = (Model, populateOptions) => catchAsync(async (req, res, next) => {
-  let query = Model.findById(req.params.id);
-  if (populateOptions) {
-    query = query.populate(populateOptions);
+  let doc = await Model.findById(req.params.bookId);
+
+  if (String(doc.user._id) !== String(req.user._id)) {
+    return next(
+      new AppError(
+        'No document found with that ID (may be there is, but not yours)',
+        404,
+      ),
+    );
   }
 
-  const doc = await query;
+  if (populateOptions) {
+    doc = doc.populate(populateOptions);
+  }
+
+  // const doc = await query;
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -58,18 +90,13 @@ exports.getOne = (Model, populateOptions) => catchAsync(async (req, res, next) =
 
   res.status(200).json({
     status: 'success',
-    data: {
-      data: doc,
-    },
+    data: doc,
   });
 });
 
 exports.getAll = (Model) => catchAsync(async (req, res, next) => {
   //   To allow for nested GEt reviews
-  let filter = {};
-  if (req.params.tourId) {
-    filter = { tour: req.params.tourId };
-  }
+  const filter = { user: req.user };
 
   const features = new APIFeatures(Model.find(filter), req.query)
     .filter()

@@ -10,24 +10,24 @@ const bookSchema = new mongoose.Schema(
     },
     releaseDate: {
       type: Date,
-      required: [true, 'Release date cannot be empty'],
+      // required: [true, 'Release date cannot be empty'],
     },
     lentTo: {
       type: String,
     },
     coverURL: {
       type: String,
-      required: [true, 'Cover URL cannot be empty'],
-    },
-    user: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      required: [true, 'Book must belong to a user'],
+      // required: [true, 'Cover URL cannot be empty'],
     },
     createdAt: {
       type: Date,
       default: Date.now(),
       select: false,
+    },
+    user:
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
     },
   },
   {
@@ -36,7 +36,7 @@ const bookSchema = new mongoose.Schema(
   },
 );
 
-bookSchema.pre(/^find/, function (next) {
+bookSchema.pre(/^find/, (next) => {
   //   this.populate({
   //     path: 'tour',
   //     select: '-__v'
@@ -45,10 +45,10 @@ bookSchema.pre(/^find/, function (next) {
   //     select: 'name photo'
   //   });
 
-  this.populate({
-    path: 'user',
-    select: 'name',
-  });
+  // this.populate({
+  //   path: 'user',
+  //   select: 'name',
+  // });
 
   next();
 });

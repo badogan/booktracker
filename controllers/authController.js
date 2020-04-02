@@ -43,6 +43,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   });
 
+  console.log('HERE:    ', newUser);
   createSendToken(newUser, 201, res);
 });
 
@@ -103,6 +104,8 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  // console.log('req.user IS:', req.user),
+  // console.log('currentuser IS : ', currentUser),
   next();
 });
 
