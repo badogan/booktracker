@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 // const rateLimit = require('express-rate-limit');
 // const helmet = require('helmet');
@@ -10,7 +11,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const userRouter = require('./routes/userRoutes');
-const bookRouter = require('./routes/bookRoutes');
+const bookRouter = require('./routes/BACKUP_bookRoutes');
 
 const app = express();
 
@@ -65,6 +66,17 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
+const whitelist = ['http://localhost:3000', 'http://example2.com'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new AppError('Not allowed by CORS'));
+    }
+  },
+};
+app.use(cors(corsOptions));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/books', bookRouter);
 
