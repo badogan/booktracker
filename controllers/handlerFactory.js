@@ -48,10 +48,11 @@ exports.updateOne = (Model) => catchAsync(async (req, res, next) => {
     return next(new AppError('No doc found with that IDppppp', 404));
   }
 
+  // console.log('doc IS: ', doc)
   res.status(200).json({
     status: 'success',
     data: {
-      data: doc,
+      data: doc
     },
   });
 });

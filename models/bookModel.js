@@ -6,7 +6,7 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Title cannot be empty'],
       maxlength: [50, 'A title must have less or equal than 50 characters'],
-      minlength: [1, 'A review must have more or equal than 1 character'],
+      minlength: [2, 'A review must have more or equal than 1 character'],
     },
     releaseDate: {
       type: Date,

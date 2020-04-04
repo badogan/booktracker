@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-const whitelist = ['http://localhost:3000', 'http://example2.com'];
+const whitelist = ['http://localhost:3000', 'http://example2.com', 'http://localhost:5000'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -76,7 +76,9 @@ const corsOptions = {
     }
   },
 };
-app.use(cors(corsOptions));
+app.use(cors());
+// app.use(cors(corsOptions));
+app.options('*', cors());
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/books', bookRouter);
 
