@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
+    "start": "node server.js",
     "start:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "Basri Dogan",
@@ -26,5 +27,8 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
