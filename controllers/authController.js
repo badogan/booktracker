@@ -43,7 +43,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   });
 
-  console.log('HERE:    ', newUser);
+  // console.log('HERE:    ', newUser);
   createSendToken(newUser, 201, res);
 });
 
@@ -60,7 +60,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
-  console.log("Somebody has just LOGGED IN!")
+  // console.log("Somebody has just LOGGED IN!")
   // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
 });

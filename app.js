@@ -6,6 +6,7 @@ const morgan = require('morgan');
 // const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
 // const hpp = require('hpp');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -65,16 +66,23 @@ app.use((req, res, next) => {
   next();
 });
 
+//Compression
+app.use(compression());
+
 // 3) ROUTES
-const whitelist = ['http://localhost:3000', 'http://example2.com', 'http://localhost:5000'];
+const whitelist = [
+  'http://localhost:3000',
+  'http://example2.com',
+  'http://localhost:5000'
+];
 const corsOptions = {
-  origin: function (origin, callback) {
+  origin: function(origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new AppError('Not allowed by CORS'));
     }
-  },
+  }
 };
 app.use(cors());
 // app.use(cors(corsOptions));
