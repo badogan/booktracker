@@ -18,6 +18,7 @@ exports.searchBook = catchAsync(async (req, res, next) => {
     url1 += '+inauthor:' + author;
   }
   url1 += '&key=' + process.env.GoogleBooksAPIKey;
+  url1 += '&country=US'
 
   const rawResponse = await fetch(url1).then(res => res.json());
   //TODO: error handling!
