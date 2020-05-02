@@ -6,3 +6,5 @@ exports.getBook = factory.getOne(Book, { path: 'user' });
 exports.createBook = factory.createOne(Book);
 exports.updateBook = factory.updateOne(Book);
 exports.deleteBook = factory.deleteOne(Book);
+//
+exports.searchBook = true

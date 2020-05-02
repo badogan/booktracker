@@ -12,7 +12,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const userRouter = require('./routes/userRoutes');
-const bookRouter = require('./routes/BACKUP_bookRoutes');
+const bookRouter = require('./routes/bookRoutes');
 
 const app = express();
 
