@@ -18,11 +18,18 @@ exports.searchBook = catchAsync(async (req, res, next) => {
     url1 += '+inauthor:' + author;
   }
   url1 += '&key=' + process.env.GoogleBooksAPIKey;
-  url1 += '&country=US'
+  url1 += '&country=US';
 
   const rawResponse = await fetch(url1).then(res => res.json());
   //TODO: error handling!
-  let result = rawResponse.items.map(item => item.volumeInfo);
+  // let result = rawResponse.items.map(item => item.volumeInfo);
+  const result = rawResponse.items.map(item => {
+    return {
+      title: item.volumeInfo.title,
+      imageLinks: item.volumeInfo.imageLinks,
+      previewLink: item.volumeInfo.previewLink
+    };
+  });
 
   res.status(200).json({
     status: 'success',
